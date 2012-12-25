@@ -19,6 +19,14 @@ function drawPlayer(position, context) {
     
 }
 
+function drawScore(score, context) {
+    context.fillStyle = '#f00';
+    context.font = '12px "LCDBOLD"';
+    context.textBaseline = 'bottom';
+    context.fillText(score, 210, 120);
+}
+
+
 function update(game){
     console.log(game);
 
@@ -27,6 +35,7 @@ function update(game){
     var context = surface.getContext("2d");
 
     drawPlayer(game.playerDirection, context);
+    drawScore(game.generatedCount, context);
 
     for(var i=0; i<5; i++) {
 	
