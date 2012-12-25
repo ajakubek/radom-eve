@@ -10,6 +10,7 @@ var lowerRightRail = new Array([360, 155], [345, 160], [330, 165], [315, 170], [
 var leftEscape =     new Array([200, 205], [185, 205], [170, 205], [155, 205], [140, 205]);
 var rightEscape =    new Array([300, 205], [315, 205], [330, 205], [345, 205], [360, 205]);
 var playerPos =      new Array([183, 138], [195, 138], [195, 138], [183, 138]);
+
 function drawPlayer(position, context) {
     var img_src = 'assets/baba' + position + '.png';
     var playerImg = new Image();
@@ -25,26 +26,26 @@ function update(game){
     var surface = document.querySelector("#game");
     var context = surface.getContext("2d");
 
-    drawPlayer(0, context);
+    drawPlayer(game.playerDirection, context);
 
     for(var i=0; i<5; i++) {
 	
-	if (!game.upperLeftRail[i]) {
+	if (game.upperLeftRail[i]) {
 	    context.drawImage(bottle, upperLeftRail[i][0], upperLeftRail[i][1]);
 	}
-	if (!game.lowerLeftRail[i]) {
+	if (game.lowerLeftRail[i]) {
 	    context.drawImage(bottle, lowerLeftRail[i][0], lowerLeftRail[i][1]);
 	}
-	if (!game.upperRightRail[i]) {
+	if (game.upperRightRail[i]) {
 	    context.drawImage(bottle, upperRightRail[i][0], upperRightRail[i][1]);
 	}
-	if (!game.lowerRightRail[i]) {
+	if (game.lowerRightRail[i]) {
 	    context.drawImage(bottle, lowerRightRail[i][0], lowerRightRail[i][1]);
 	}
-	if (!game.leftEscape[i]) {
+	if (game.leftEscape[i]) {
 	    context.drawImage(bottle, leftEscape[i][0], leftEscape[i][1]);
 	}
-	if (!game.rightEscape[i]) {
+	if (game.rightEscape[i]) {
 	    context.drawImage(bottle, rightEscape[i][0], rightEscape[i][1]);
 	}
     }
