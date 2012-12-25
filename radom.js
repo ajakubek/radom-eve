@@ -32,8 +32,6 @@ function drawScore(score, context) {
 
 
 function update(state){
-    console.log(state);
-
 
     var surface = document.querySelector("#game");
     var context = surface.getContext("2d");
@@ -68,8 +66,61 @@ function update(state){
 
 }
 
-function init()
+function handleKey(keyCode)
 {
-    Game.onStateChange(update);
+    var playerDir = Game.State.playerDirection;
+
+    if (keyCode == 37)  // cursor left
+    {
+        if (playerDir == Game.Direction.UpperRight)
+            Game.setPlayerDirection(Game.Direction.UpperLeft);
+        else if (playerDir == Game.Direction.LowerRight)
+            Game.setPlayerDirection(Game.Direction.LowerLeft);
+
+    }
+    else if (keyCode == 38) // cursor up
+    {
+        if (playerDir == Game.Direction.LowerLeft)
+            Game.setPlayerDirection(Game.Direction.UpperLeft);
+        else if (playerDir == Game.Direction.LowerRight)
+            Game.setPlayerDirection(Game.Direction.UpperRight);
+    }
+    else if (keyCode == 39) // cursor right
+    {
+        if (playerDir == Game.Direction.UpperLeft)
+            Game.setPlayerDirection(Game.Direction.UpperRight);
+        else if (playerDir == Game.Direction.LowerLeft)
+            Game.setPlayerDirection(Game.Direction.LowerRight);
+    }
+    else if (keyCode == 40) // cursor down
+    {
+        if (playerDir == Game.Direction.UpperLeft)
+            Game.setPlayerDirection(Game.Direction.LowerLeft);
+        else if (playerDir == Game.Direction.UpperRight)
+            Game.setPlayerDirection(Game.Direction.LowerRight);
+    }
 }
 
+function registerKeyHandler()
+{
+    document.onkeydown = function(e)
+    {
+        if (!e)
+            var e = window.event;
+        if (e)
+        {
+            e.cancelBubble = true;
+            if (e.stopPropagation)
+                e.stopPropagation();
+
+            var keyCode = e.charCode ? e.charCode : e.keyCode;
+            handleKey(keyCode);
+        }
+    };
+}
+
+function init()
+{
+    registerKeyHandler();
+    Game.onStateChange(update);
+}
