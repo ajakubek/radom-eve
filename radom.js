@@ -21,6 +21,7 @@ function drawPlayer(position, context) {
 
 function drawScore(score, context) {
     context.textBaseline = 'top';
+    context.font         = '12px lcd';
     context.fillText(score, 220, 110);
 }
 
