@@ -170,7 +170,7 @@ Game.startGameB = function()
     stepTimer.reset();
 };
 
-Game.setDirection = function(direction)
+Game.setPlayerDirection = function(direction)
 {
     Game.State.playerDirection = direction;
     stateChanged();
