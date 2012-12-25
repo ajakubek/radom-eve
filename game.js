@@ -17,10 +17,10 @@ var MaxDrops = Game.MaxDrops = 3;
 
 var Direction = Game.Direction =
 {
-    UpperLeft:  0,
-    UpperRight: 1,
-    LowerLeft:  2,
-    LowerRight: 3
+    UpperLeft:  2,
+    UpperRight: 3,
+    LowerLeft:  0,
+    LowerRight: 1
 };
 
 function State(type)
