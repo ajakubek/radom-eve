@@ -9,7 +9,7 @@ var lowerRightRail = new Array([360, 155], [345, 160], [330, 165], [315, 170], [
 
 var leftEscape =     new Array([200, 205], [185, 205], [170, 205], [155, 205], [140, 205]);
 var rightEscape =    new Array([300, 205], [315, 205], [330, 205], [345, 205], [360, 205]);
-var playerPos =      new Array([183, 138], [195, 138], [195, 138], [183, 138]);
+var playerPos =      new Array([183, 137], [195, 137], [195, 137], [183, 137]);
 
 function drawPlayer(position, context) {
     var img_src = 'assets/baba' + position + '.png';
@@ -35,6 +35,7 @@ function update(state){
 
     var surface = document.querySelector("#game");
     var context = surface.getContext("2d");
+    context.clearRect(0, 0, surface.width, surface.height);
 
     drawPlayer(state.playerDirection, context);
     drawScore(state.caughtCount, context);
