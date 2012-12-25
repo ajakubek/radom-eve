@@ -21,40 +21,40 @@ function drawPlayer(position, context) {
 
 function drawScore(score, context) {
     context.fillStyle = '#f00';
-    context.font = '12px "LCDBOLD"';
+//    context.font = '12px LCDBOLD';
     context.textBaseline = 'bottom';
     context.fillText(score, 210, 120);
 }
 
 
-function update(game){
-    console.log(game);
+function update(state){
+    console.log(state);
 
 
     var surface = document.querySelector("#game");
     var context = surface.getContext("2d");
 
-    drawPlayer(game.playerDirection, context);
-    drawScore(game.generatedCount, context);
+    drawPlayer(state.playerDirection, context);
+    drawScore(state.caughtCount, context);
 
     for(var i=0; i<5; i++) {
 	
-	if (game.upperLeftRail[i]) {
+	if (state.upperLeftRail[i]) {
 	    context.drawImage(bottle, upperLeftRail[i][0], upperLeftRail[i][1]);
 	}
-	if (game.lowerLeftRail[i]) {
+	if (state.lowerLeftRail[i]) {
 	    context.drawImage(bottle, lowerLeftRail[i][0], lowerLeftRail[i][1]);
 	}
-	if (game.upperRightRail[i]) {
+	if (state.upperRightRail[i]) {
 	    context.drawImage(bottle, upperRightRail[i][0], upperRightRail[i][1]);
 	}
-	if (game.lowerRightRail[i]) {
+	if (state.lowerRightRail[i]) {
 	    context.drawImage(bottle, lowerRightRail[i][0], lowerRightRail[i][1]);
 	}
-	if (game.leftEscape[i]) {
+	if (state.leftEscape[i]) {
 	    context.drawImage(bottle, leftEscape[i][0], leftEscape[i][1]);
 	}
-	if (game.rightEscape[i]) {
+	if (state.rightEscape[i]) {
 	    context.drawImage(bottle, rightEscape[i][0], rightEscape[i][1]);
 	}
     }
