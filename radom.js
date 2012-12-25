@@ -20,10 +20,14 @@ function drawPlayer(position, context) {
 }
 
 function drawScore(score, context) {
-    context.fillStyle = '#f00';
-//    context.font = '12px LCDBOLD';
-    context.textBaseline = 'bottom';
-    context.fillText(score, 210, 120);
+    // Trick from http://stackoverflow.com/questions/2635814/
+    var image = new Image;
+    image.src = 'http://fontsforweb.com/public/fonts/523/LCDBOLD.ttf';
+    image.onerror = function() {
+	context.font = '12px "LCDBOLD"';
+	context.textBaseline = 'top';
+	context.fillText(score, 220, 110);
+    };
 }
 
 
