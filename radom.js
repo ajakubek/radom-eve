@@ -57,8 +57,6 @@ function update(game){
 
 function init()
 {
-    Game.State();
     Game.onStateChange(update);
-    update(Game);
 }
 
