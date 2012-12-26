@@ -273,6 +273,17 @@ function displayGame()
     Game.onItemDropped(function() { playSound('drop'); });
 }
 
+function displayUnsupportedBrowser()
+{
+    // hide loader div
+    var loaderDiv = document.getElementById('loader');
+    loaderDiv.style.display = 'none';
+
+    // display unsupported div
+    var unsupportedDiv = document.getElementById('unsupported');
+    unsupportedDiv.style.display = 'block';
+}
+
 function initAssets()
 {
     loader.onAllLoaded(displayGame);
@@ -289,15 +300,21 @@ function initAssets()
         .addImage('game_type_a', 'assets/game_type_a.png')
         .addImage('game_type_b', 'assets/game_type_b.png')
     // sounds
-        .addSound('roll', 'assets/egg.wav')
-        .addSound('catch', 'assets/catch.wav')
-        .addSound('drop', 'assets/drop.wav')
+        .addSound('roll', ['assets/egg.mp3', 'assets/egg.wav'])
+        .addSound('catch', ['assets/catch.mp3', 'assets/catch.wav'])
+        .addSound('drop', ['assets/drop.mp3', 'assets/drop.wav'])
         .finish();
 }
 
 function init()
 {
-    initAssets();
+    if (Modernizr.canvas && Modernizr.audio &&
+        (Modernizr.audio.ogg || Modernizr.audio.wav))
+    {
+        initAssets();
+    }
+    else
+        displayUnsupportedBrowser();
 }
 
 

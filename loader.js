@@ -118,7 +118,19 @@ function Loader()
                 {
                     loadError(name, url);
                 };
-            audioElement.src = url;
+            // this is for the broken piece of shit which IE is
+            // the only browser which doesn't support wav format
+            if (url instanceof Array)
+            {
+                for (var i = 0; i < url.length; ++i)
+                {
+                    var sourceElement = document.createElement('source');
+                    sourceElement.src = url[i];
+                    audioElement.appendChild(sourceElement);
+                }
+            }
+            else
+                audioElement.src = url;
             sounds[name] = audioElement;
             ++this.numAddedSounds;
         }
