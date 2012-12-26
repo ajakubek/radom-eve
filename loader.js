@@ -3,9 +3,14 @@ function Loader()
     this.numAddedImages = 0;
     this.numLoadedImages = 0;
 
+    this.numAddedSounds = 0;
+    this.numLoadedSounds = 0;
+
     var images = {};
+    var sounds = {};
     var listFinished = false;
     var onImageLoadedCallback = null;
+    var onSoundLoadedCallback = null;
     var onAllLoadedCallback = null;
     var onErrorCallback = null;
     var self = this;
@@ -18,6 +23,14 @@ function Loader()
         ++self.numLoadedImages;
         if (listFinished && onImageLoadedCallback)
             onImageLoadedCallback();
+        checkLoadingState();
+    }
+
+    function soundLoaded()
+    {
+        ++self.numLoadedSounds;
+        if (listFinished && onSoundLoadedCallback)
+            onSoundLoadedCallback();
         checkLoadingState();
     }
 
@@ -38,7 +51,8 @@ function Loader()
     {
         if (listFinished)
         {
-            if (self.numLoadedImages >= self.numAddedImages)
+            if (self.numLoadedImages >= self.numAddedImages &&
+                self.numLoadedSounds >= self.numAddedSounds)
             {
                 if (onAllLoadedCallback)
                     onAllLoadedCallback();
@@ -56,6 +70,11 @@ function Loader()
         onImageLoadedCallback = callback;
     };
 
+    this.onSoundLoaded = function(callback)
+    {
+        onSoundLoadedCallback = callback;
+    };
+
     this.onAllLoaded = function(callback)
     {
         onAllLoadedCallback = callback;
@@ -70,19 +89,42 @@ function Loader()
     {
         if (!listFinished)
         {
-            var image = new Image();
-            image.onload = imageLoaded;
-            image.onerror =
+            var imageElement = new Image();
+            imageElement.onload = imageLoaded;
+            imageElement.onerror =
                 function()
                 {
                     loadError(name, url);
                 };
-            image.src = url;
-            images[name] = image;
+            imageElement.src = url;
+            images[name] = imageElement;
             ++this.numAddedImages;
         }
         return this;
     };
+
+    this.addSound = function(name, url)
+    {
+        if (typeof Audio == 'undefined')
+            return this;
+
+        if (!listFinished)
+        {
+            var audioElement = new Audio();
+            audioElement.preload = 'auto';
+            audioElement.addEventListener('canplaythrough', soundLoaded, false);
+            audioElement.onerror =
+                function()
+                {
+                    loadError(name, url);
+                };
+            audioElement.src = url;
+            sounds[name] = audioElement;
+            ++this.numAddedSounds;
+        }
+        return this;
+
+    }
 
     this.finish = function()
     {
@@ -98,4 +140,12 @@ function Loader()
 
         return images[name];
     };
+
+    this.getSound = function(name)
+    {
+        if (!listFinished)
+            return null;
+
+        return sounds[name];
+    }
 };

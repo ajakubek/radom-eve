@@ -60,7 +60,7 @@ function Ramp(initialValue)
     this.interpolate = function(level)
     {
         var value = this.initialValue;
-        for (i = 0; i < this.steps.length; ++i)
+        for (var i = 0; i < this.steps.length; ++i)
         {
             if (this.steps[i][0] > level)
                 break;
@@ -122,8 +122,9 @@ var GameBOptions = new Options(
         .addStep(100, 1));
 
 var stateChangeCallback = null;
-var tickCallback = null;
-var dropCallback = null;
+var itemRollingCallback = null;
+var itemCaughtCallback = null;
+var itemDroppedCallback = null;
 var stepTimer = new Timer();
 var options = null;
 
@@ -140,6 +141,11 @@ Game.onTick = function(callback)
 {
     tickCallback = callback;
 };
+
+Game.onItemRolling = function(callback)
+{
+    itemRollingCallback = callback;
+}
 
 Game.onItemCaught = function(callback)
 {
@@ -223,6 +229,22 @@ function runGameStep()
     shiftQueue(Game.State.leftEscape, leftDropped);
     shiftQueue(Game.State.rightEscape, rightDropped);
 
+    var queues = [ Game.State.upperLeftRail,
+                   Game.State.lowerLeftRail,
+                   Game.State.upperRightRail,
+                   Game.State.lowerRightRail,
+                   Game.State.leftEscape,
+                   Game.State.rightEscape
+                 ];
+    for (var i = 0; i < queues.length; ++i)
+    {
+        if (queueContainsItem(queues[i]))
+        {
+            itemRolling();
+            break;
+        }
+    }
+
     Game.State.step += 1;
 }
 
@@ -268,10 +290,24 @@ function shiftQueue(queue, newItem)
     return queue.pop();
 }
 
+function queueContainsItem(queue)
+{
+    for (var i = 0; i < queue.length; ++i)
+        if (queue[i])
+            return true;
+    return false;
+}
+
 function stateChanged()
 {
     if (typeof stateChangeCallback == 'function')
         stateChangeCallback(Game.State);
+}
+
+function itemRolling()
+{
+    if (typeof itemRollingCallback == 'function')
+        itemRollingCallback();
 }
 
 function itemCaught()

@@ -126,6 +126,13 @@ function registerKeyHandler()
     };
 }
 
+function playSound(soundName)
+{
+    var sound = loader.getSound(soundName);
+    if (sound)
+        sound.play();
+}
+
 function displayGame()
 {
     // hide loader div
@@ -138,12 +145,16 @@ function displayGame()
 
     registerKeyHandler();
     Game.onStateChange(update);
+    Game.onItemRolling(function() { playSound('roll'); });
+    Game.onItemCaught(function() { playSound('catch'); });
+    Game.onItemDropped(function() { playSound('drop'); });
 }
 
 function initAssets()
 {
     loader.onAllLoaded(displayGame);
     loader
+        // images
         .addImage('game', 'assets/game.png')
         .addImage('background', 'assets/bg.png')
         .addImage('bottle', 'assets/butelka0.png')
@@ -151,6 +162,10 @@ function initAssets()
         .addImage('player_upper_right', 'assets/baba3.png')
         .addImage('player_lower_left', 'assets/baba0.png')
         .addImage('player_lower_right', 'assets/baba1.png')
+        // sounds
+        .addSound('roll', 'assets/egg.wav')
+        .addSound('catch', 'assets/catch.wav')
+        .addSound('drop', 'assets/drop.wav')
         .finish();
 }
 
