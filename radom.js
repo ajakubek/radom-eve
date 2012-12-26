@@ -6,20 +6,38 @@ playerImageNames[Game.Direction.UpperRight] = 'player_upper_right';
 playerImageNames[Game.Direction.LowerLeft]  = 'player_lower_left';
 playerImageNames[Game.Direction.LowerRight] = 'player_lower_right';
 
-var upperLeftRailPos =  new Array([140, 100],  [155, 102],  [170, 103], [185, 105], [200, 130]);
-var upperRightRailPos = new Array([360, 102],  [345, 102],  [330, 103], [315, 105], [300, 130]);
-var lowerLeftRailPos =  new Array([140, 164], [155, 166], [170, 167], [185, 170], [200, 175]);
-var lowerRightRailPos = new Array([360, 165], [345, 166], [330, 167], [315, 170], [300, 175]);
+var upperLeftRailPos =  new Array([140, 100],  [155, 102],  [170, 103], [185, 105], [197, 133]);
+var upperRightRailPos = new Array([360, 102],  [345, 102],  [330, 103], [315, 105], [302, 133]);
+var lowerLeftRailPos =  new Array([140, 164], [155, 166], [170, 167], [185, 170], [200, 180]);
+var lowerRightRailPos = new Array([360, 165], [345, 166], [330, 167], [315, 170], [300, 183]);
+
+var upperLeftRailAngle =  new Array(0.0, 0.0, 0.0, 0.0, 30);
+var upperRightRailAngle = new Array(0.0, 0.0, 0.0, 0.0, -30);
+var lowerLeftRailAngle =  new Array(0.0, 0.0, 0.0, 0.0, 30);
+var lowerRightRailAngle = new Array(0.0, 0.0, 0.0, 0.0, -20);
 
 var upperLeftRailScale =  new Array(0.6, 0.7, 0.8, 0.9, 1.0);
 var upperRightRailScale = new Array(0.6, 0.7, 0.8, 0.9, 1.0);
 var lowerLeftRailScale =  new Array(0.6, 0.7, 0.8, 0.9, 1.0);
 var lowerRightRailScale = new Array(0.6, 0.7, 0.8, 0.9, 1.0);
 
-var leftEscapePos =     new Array([200, 205], [185, 205], [170, 205], [155, 205], [140, 205]);
-var rightEscapePos =    new Array([300, 205], [315, 205], [330, 205], [345, 205], [360, 205]);
+var leftEscapePos =     new Array([190, 210], [180, 210], [170, 210], [155, 210], [140, 210]);
+var rightEscapePos =    new Array([305, 210], [325, 210], [335, 210], [348, 210], [360, 210]);
 
-var playerPos =      new Array([195, 137], [183, 137], [183, 137], [195, 137]);
+var leftEscapeAngle =     new Array(-20, 16, -6, 20, -13);
+var rightEscapeAngle =    new Array(18, -14, 8, 16, 5);
+
+var leftEscapeScale =     new Array(0.6, 0.6, 0.6, 0.6, 0.6);
+var rightEscapeScale =    new Array(0.6, 0.6, 0.6, 0.6, 0.6);
+
+var playerPos =      new Array([195, 126], [183, 126], [183, 126], [195, 126]);
+
+
+function deg2rad(degrees)
+{
+    return degrees * Math.PI / 180;
+}
+
 
 function zeroFill(number, width) {
     width -= (number.toString().length - /\./.test(number));
@@ -51,22 +69,30 @@ function drawScore(score, fails, context) {
 }
 
 
-function drawSprite(context, sprite, x, y, scale)
+function drawSprite(context, sprite, x, y, scale, angle)
 {
     scale = scale || 1.0;
-    context.drawImage(sprite, x, y, sprite.width*scale, sprite.height*scale);
+    angle = angle || 0.0;
+    context.save();
+    context.translate(x, y);
+    context.rotate(deg2rad(angle));
+    context.scale(scale, scale);
+    context.drawImage(sprite, 0, 0);
+    context.restore();
 }
+
 
 function update(state){
 
-    var surface = document.querySelector("#game");
+    var surface = document.getElementById("game");
     var context = surface.getContext("2d");
     var bottle = loader.getImage('bottle');
 
     context.drawImage(loader.getImage('game'), 0, 0);
+
     if (state.running) {
-	drawPlayer(state.playerDirection, context);
-	drawScore(state.caughtCount, state.droppedCount, context);	
+        drawPlayer(state.playerDirection, context);
+        drawScore(state.caughtCount, state.droppedCount, context);
     }
 
     for(var i=0; i<5; i++) {
@@ -74,28 +100,32 @@ function update(state){
 	if (state.upperLeftRail[i]) {
 	    drawSprite(context, bottle,
                    upperLeftRailPos[i][0], upperLeftRailPos[i][1],
-                   upperLeftRailScale[i]);
+                   upperLeftRailScale[i], upperLeftRailAngle[i]);
 	}
 	if (state.lowerLeftRail[i]) {
 	    drawSprite(context, bottle,
                    lowerLeftRailPos[i][0], lowerLeftRailPos[i][1],
-                   lowerLeftRailScale[i]);
+                   lowerLeftRailScale[i], lowerLeftRailAngle[i]);
 	}
 	if (state.upperRightRail[i]) {
 	    drawSprite(context, bottle,
                    upperRightRailPos[i][0], upperRightRailPos[i][1],
-                   upperRightRailScale[i]);
+                   upperRightRailScale[i], upperRightRailAngle[i]);
 	}
 	if (state.lowerRightRail[i]) {
 	    drawSprite(context, bottle,
                    lowerRightRailPos[i][0], lowerRightRailPos[i][1],
-                   lowerRightRailScale[i]);
+                   lowerRightRailScale[i], lowerRightRailAngle[i]);
 	}
 	if (state.leftEscape[i]) {
-	    drawSprite(context, bottle, leftEscapePos[i][0], leftEscapePos[i][1]);
+	    drawSprite(context, bottle,
+                   leftEscapePos[i][0], leftEscapePos[i][1],
+                   leftEscapeScale[i], leftEscapeAngle[i]);
 	}
 	if (state.rightEscape[i]) {
-	    drawSprite(context, bottle, rightEscapePos[i][0], rightEscapePos[i][1]);
+	    drawSprite(context, bottle,
+                   rightEscapePos[i][0], rightEscapePos[i][1],
+                   leftEscapeScale[i], leftEscapeAngle[i]);
 	}
     }
 
