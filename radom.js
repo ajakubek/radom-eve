@@ -6,15 +6,15 @@ playerImageNames[Game.Direction.UpperRight] = 'player_upper_right';
 playerImageNames[Game.Direction.LowerLeft]  = 'player_lower_left';
 playerImageNames[Game.Direction.LowerRight] = 'player_lower_right';
 
-var upperLeftRailPos =  new Array([140, 100],  [155, 102],  [170, 103], [185, 105], [197, 133]);
+var upperLeftRailPos =  new Array([140, 100],  [155, 102],  [170, 103], [185, 104], [197, 133]);
 var upperRightRailPos = new Array([360, 102],  [345, 102],  [330, 103], [315, 105], [302, 133]);
-var lowerLeftRailPos =  new Array([140, 164], [155, 166], [170, 167], [185, 170], [200, 180]);
-var lowerRightRailPos = new Array([360, 165], [345, 166], [330, 167], [315, 170], [300, 183]);
+var lowerLeftRailPos =  new Array([140, 164], [155, 166], [170, 167], [185, 169], [200, 180]);
+var lowerRightRailPos = new Array([360, 165], [345, 166], [330, 167], [315, 169], [300, 183]);
 
-var upperLeftRailAngle =  new Array(0.0, 0.0, 0.0, 0.0, 30);
-var upperRightRailAngle = new Array(0.0, 0.0, 0.0, 0.0, -30);
-var lowerLeftRailAngle =  new Array(0.0, 0.0, 0.0, 0.0, 30);
-var lowerRightRailAngle = new Array(0.0, 0.0, 0.0, 0.0, -20);
+var upperLeftRailAngle =  new Array(0.0, 0.0, 0.0, 5.0, 30.0);
+var upperRightRailAngle = new Array(0.0, 0.0, 0.0, -5.0, -30.0);
+var lowerLeftRailAngle =  new Array(0.0, 0.0, 0.0, 5.0, 30.0);
+var lowerRightRailAngle = new Array(0.0, 0.0, 0.0, -5.0, -20.0);
 
 var upperLeftRailScale =  new Array(0.6, 0.7, 0.8, 0.9, 1.0);
 var upperRightRailScale = new Array(0.6, 0.7, 0.8, 0.9, 1.0);
@@ -215,7 +215,7 @@ function gameOnClick(event) {
 	if(distance < radius) return true;
 	return false;
     };
-    var surface = document.querySelector("#game");
+    var surface = document.getElementById("game");
     var coords = surface.relMouseCoords(event);
 
     var x = coords.x;
@@ -244,7 +244,7 @@ function gameOnClick(event) {
 }
 
 function registerMouseClick() {
-    var surface = document.querySelector("#game");
+    var surface = document.getElementById("game");
     surface.addEventListener("click", gameOnClick, false);    
 }
 
@@ -273,6 +273,17 @@ function displayGame()
     Game.onItemDropped(function() { playSound('drop'); });
 }
 
+function displayUnsupportedBrowser()
+{
+    // hide loader div
+    var loaderDiv = document.getElementById('loader');
+    loaderDiv.style.display = 'none';
+
+    // display unsupported div
+    var unsupportedDiv = document.getElementById('unsupported');
+    unsupportedDiv.style.display = 'block';
+}
+
 function initAssets()
 {
     loader.onAllLoaded(displayGame);
@@ -289,15 +300,21 @@ function initAssets()
         .addImage('game_type_a', 'assets/game_type_a.png')
         .addImage('game_type_b', 'assets/game_type_b.png')
     // sounds
-        .addSound('roll', 'assets/egg.wav')
-        .addSound('catch', 'assets/catch.wav')
-        .addSound('drop', 'assets/drop.wav')
+        .addSound('roll', ['assets/egg.mp3', 'assets/egg.wav'])
+        .addSound('catch', ['assets/catch.mp3', 'assets/catch.wav'])
+        .addSound('drop', ['assets/drop.mp3', 'assets/drop.wav'])
         .finish();
 }
 
 function init()
 {
-    initAssets();
+    if (Modernizr.canvas && Modernizr.audio &&
+        (Modernizr.audio.ogg || Modernizr.audio.wav))
+    {
+        initAssets();
+    }
+    else
+        displayUnsupportedBrowser();
 }
 
 

@@ -6,12 +6,13 @@
     <style type="text/css">
       #loader
       {
-          width: 515px;
-          height: 308px;
-          padding-top: 150px;
-          margin-left: auto;
-          margin-right: auto;
-          text-align: center;
+        width: 515px;
+        height: 308px;
+        padding-top: 150px;
+        margin-left: auto;
+        margin-right: auto;
+        text-align: center;
+        font-family: sans-serif;
       }
       #game
       {
@@ -20,22 +21,46 @@
       }
       #help
       {
-          width: 515px;
-          margin-left: auto;
-          margin-right: auto;
-          font-family: sans-serif;
+        width: 515px;
+        margin-left: auto;
+        margin-right: auto;
+        font-family: sans-serif;
+      }
+      #unsupported
+      {
+        display: none;
+        width: 515px;
+        margin-left: auto;
+        margin-right: auto;
+        font-family: sans-serif;
+        background-color: #ffcc99;
+        border 2px solid;
+        border-radius: 10px;
+        padding: 10px;
       }
       @font-face {
          font-family: 'lcd';
          src: url('assets/LCD2B___.TTF');
       }
     </style>
+    <script type="text/javascript" src="modernizr.min.js"></script>
     <script type="text/javascript" src="game.js"></script>
     <script type="text/javascript" src="loader.js"></script>
     <script type="text/javascript" src="radom.js"></script>
+    <!-- <script type="text/javascript" src="radom.min.js"></script> -->
   </head>
   <body onload="init()">
     <div id="loader">Ładowanie, proszę czekać...</div>
+    <div id="unsupported">
+      Twoja przeglądarka nie obsługuje wymaganych technologii.<br>
+      <br>
+      Minimalne wersje obsługiwanych przeglądarek:
+      <ul>
+       <li>Firefox 3.5</li>
+       <li>Chrome 3</li>
+       <li>IE 9</li>
+      </ul>
+    </div>
     <canvas id="game" width="515" height="308"></canvas>
     <div id="help">
       Klawiszologia:<br>
