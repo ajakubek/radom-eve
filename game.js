@@ -70,11 +70,12 @@ function Ramp(initialValue)
     };
 };
 
-function Options(newItemDelayramp,
-                 stepIntervalRamp)
+function Options(stepIntervalRamp,
+                 newItemDelayRamp)
 {
-    this.newItemDelayRamp = new Ramp();
-    this.stepIntervalRamp = new Ramp();
+
+    this.stepIntervalRamp = stepIntervalRamp || new Ramp(0);
+    this.newItemDelayRamp = newItemDelayRamp || new Ramp(0);
 }
 
 function Timer()
@@ -186,7 +187,6 @@ function timerTick()
 
     var currentStepInterval =
         options.stepIntervalRamp.interpolate(Game.State.step);
-    console.log(currentStepInterval);
     if (stepTimer.elapsed() > currentStepInterval)
     {
         // new game step
@@ -206,15 +206,15 @@ function runGameStep()
     if (updateRail(Game.State.upperLeftRail,
                    Direction.UpperLeft,
                    newItemDirection === Direction.UpperLeft) ||
-        updateRail(Game.State.upperRightRail,
-                   Direction.UpperRight,
-                   newItemDirection === Direction.UpperRight))
+        updateRail(Game.State.lowerLeftRail,
+                   Direction.LowerLeft,
+                   newItemDirection === Direction.LowerLeft))
         leftDropped = true;
 
     var rightDropped = false;
-    if (updateRail(Game.State.lowerLeftRail,
-                   Direction.LowerLeft,
-                   newItemDirection === Direction.LowerLeft) ||
+    if (updateRail(Game.State.upperRightRail,
+                   Direction.UpperRight,
+                   newItemDirection === Direction.UpperRight) ||
         updateRail(Game.State.lowerRightRail,
                    Direction.LowerRight,
                    newItemDirection === Direction.LowerRight))
@@ -222,9 +222,6 @@ function runGameStep()
 
     shiftQueue(Game.State.leftEscape, leftDropped);
     shiftQueue(Game.State.rightEscape, rightDropped);
-
-    if (leftDropped || rightDropped)
-        itemDropped();
 
     Game.State.step += 1;
 }
@@ -240,7 +237,7 @@ function generateNewItem()
     {
         // generate new item
         Game.State.lastNewItemStep = Game.State.step;
-        return Math.random() % 4;
+        return Math.floor(Math.random() * 4);
     }
     else
     {
@@ -251,14 +248,18 @@ function generateNewItem()
 
 function updateRail(railQueue, railDirection, newItem)
 {
-    var itemFalling = shiftQueue(railState, newItem);
+    var itemFalling = shiftQueue(railQueue, newItem);
     if (itemFalling)
     {
-        if (Game.State.playerDirection === railDirection)
-            itemCaught();
-        else
+        if (Game.State.playerDirection !== railDirection)
+        {
             itemDropped();
+            return true;
+        }
+        else
+            itemCaught();
     }
+    return false;
 }
 
 function shiftQueue(queue, newItem)
