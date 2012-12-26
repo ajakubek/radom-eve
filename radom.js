@@ -36,12 +36,12 @@ function drawScore(score, fails, context) {
     context.textBaseline = 'top';
     context.font         = '18px lcd';
     context.fillStyle    = '#3e3e3e';
-    context.fillText(zeroFill(score, 4), 220, 93);
+    context.fillText(zeroFill(score, 4), 220, 98);
     var lemonImage = loader.getImage('lemon');
     var lemons = Math.abs(3-fails);
     for(var i=0;i<lemons;i++){
 	var x = 245 - i * 15;
-	context.drawImage(lemonImage, x, 110);	
+	context.drawImage(lemonImage, x, 115);
     }
 }
 
