@@ -18,6 +18,13 @@
         display: none;
         margin: 1em auto;
       }
+      #help
+      {
+          width: 515px;
+          margin-left: auto;
+          margin-right: auto;
+          font-family: sans-serif;
+      }
       @font-face {
          font-family: 'lcd';
          src: url('assets/LCD2B___.TTF');
@@ -28,7 +35,15 @@
     <script type="text/javascript" src="radom.js"></script>
   </head>
   <body onload="init()">
-    <div id="loader">Loading, please wait...</div>
+    <div id="loader">Ładowanie, proszę czekać...</div>
     <canvas id="game" width="515" height="308"></canvas>
+    <div id="help">
+      Klawiszologia:<br>
+      <ul>
+        <li>A - rozpoczęcie gry A</li>
+        <li>B - rozpoczęcie gry B</li>
+        <li>kursory - sterowanie babą</li>
+      </ul>
+    </div>
   </body>
 </html>
