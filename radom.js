@@ -215,7 +215,7 @@ function gameOnClick(event) {
 	if(distance < radius) return true;
 	return false;
     };
-    var surface = document.querySelector("#game");
+    var surface = document.getElementById("game");
     var coords = surface.relMouseCoords(event);
 
     var x = coords.x;
@@ -244,7 +244,7 @@ function gameOnClick(event) {
 }
 
 function registerMouseClick() {
-    var surface = document.querySelector("#game");
+    var surface = document.getElementById("game");
     surface.addEventListener("click", gameOnClick, false);    
 }
 
