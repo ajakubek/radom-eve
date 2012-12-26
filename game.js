@@ -99,27 +99,35 @@ function Timer()
 
 var GameAOptions = new Options(
     new Ramp(1000)
-        .addStep(250,   750)
-        .addStep(500,   500)
-        .addStep(750,   250)
-        .addStep(1000,  100),
+        .addStep(250, 900)
+        .addStep(300, 800)
+        .addStep(350, 700)
+        .addStep(400, 600)
+        .addStep(450, 500)
+        .addStep(500, 400)
+        .addStep(550, 300)
+        .addStep(600, 200)
+        .addStep(650, 100),
     new Ramp(6)
         .addStep(40,  5)
         .addStep(80,  4)
         .addStep(120, 3)
         .addStep(160, 2)
-        .addStep(200, 1));
+        .addStep(700, 1));
 var GameBOptions = new Options(
-    new Ramp(750)
-        .addStep(50,  500)
-        .addStep(100, 250)
-        .addStep(150, 100),
+    new Ramp(700)
+        .addStep(100, 600)
+        .addStep(150, 500)
+        .addStep(200, 400)
+        .addStep(250, 300)
+        .addStep(300, 200)
+        .addStep(350, 100),
     new Ramp(6)
         .addStep(20,  5)
         .addStep(40,  4)
         .addStep(60,  3)
         .addStep(80,  2)
-        .addStep(100, 1));
+        .addStep(400, 1));
 
 var stateChangeCallback = null;
 var itemRollingCallback = null;
