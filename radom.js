@@ -145,6 +145,50 @@ function registerKeyHandler()
     };
 }
 
+
+function gameOnClick(event) {
+    Number.prototype.between = function(first,last){
+	return (first < last ? this >= first && this <= last : this >= last && this <= first);
+    };
+
+    function isinsideCircle(mx, my, cx, cy, radius){
+	var distance = Math.sqrt((mx - cx) * (mx - cx) + (my - cy) * (my - cy));
+	if(distance < radius) return true;
+	return false;
+    };
+    var surface = document.querySelector("#game");
+    var context = surface.getContext("2d");
+
+    var x = event.offsetX;
+    var y = event.offsetY;
+    if(x.between(437, 456) && y.between(32, 51)) {
+        Game.startGameA();
+    }
+    if(x.between(437, 456) && y.between(79, 87)) {
+        Game.startGameB();
+    }
+    if(x.between(437, 456) && y.between(113, 121)) {
+	console.log('czas');
+    }
+    if(isinsideCircle(x, y, 61, 206, 10)) {
+        Game.setPlayerDirection(Game.Direction.UpperLeft);
+    }
+    if(isinsideCircle(x, y, 61, 260, 10)) {
+        Game.setPlayerDirection(Game.Direction.LowerLeft);
+    }
+    if(isinsideCircle(x, y, 454, 206, 10)) {
+        Game.setPlayerDirection(Game.Direction.UpperRight);
+    }
+    if(isinsideCircle(x, y, 454, 260, 10)) {
+        Game.setPlayerDirection(Game.Direction.LowerRight);
+    }
+}
+
+function registerMouseClick() {
+    var surface = document.querySelector("#game");
+    surface.addEventListener("click", gameOnClick, false);    
+}
+
 function playSound(soundName)
 {
     var sound = loader.getSound(soundName);
@@ -163,6 +207,7 @@ function displayGame()
     surface.style.display = 'block';
 
     registerKeyHandler();
+    registerMouseClick();
     Game.onStateChange(update);
     Game.onItemRolling(function() { playSound('roll'); });
     Game.onItemCaught(function() { playSound('catch'); });
