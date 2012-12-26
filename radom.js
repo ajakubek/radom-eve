@@ -58,7 +58,7 @@ function drawPlayer(position, context) {
 function drawScore(score, fails, context) {
     context.textBaseline = 'top';
     context.font         = '18px lcd';
-    context.fillStyle    = '#3e3e3e';
+    context.fillStyle    = '#444444';
     context.fillText(zeroFill(score, 4), 220, 98);
     var lemonImage = loader.getImage('lemon');
     var lemons = Math.abs(3-fails);
