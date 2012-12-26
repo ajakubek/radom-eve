@@ -309,7 +309,7 @@ function initAssets()
 function init()
 {
     if (Modernizr.canvas && Modernizr.audio &&
-        (Modernizr.audio.ogg || Modernizr.audio.wav))
+        (Modernizr.audio.mp3 || Modernizr.audio.wav))
     {
         initAssets();
     }
