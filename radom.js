@@ -69,6 +69,15 @@ function drawScore(score, fails, context) {
 }
 
 
+function drawGameType(gameType, context)
+{
+    if (gameType == 'A')
+        context.drawImage(loader.getImage('game_type_a'), 265, 104);
+    else if (gameType = 'B')
+        context.drawImage(loader.getImage('game_type_b'), 265, 113);
+}
+
+
 function drawSprite(context, sprite, x, y, scale, angle)
 {
     scale = scale || 1.0;
@@ -93,6 +102,7 @@ function update(state){
     if (state.running) {
         drawPlayer(state.playerDirection, context);
         drawScore(state.caughtCount, state.droppedCount, context);
+        drawGameType(state.gameType, context);
     }
 
     for(var i=0; i<5; i++) {
@@ -276,6 +286,8 @@ function initAssets()
         .addImage('player_lower_left', 'assets/baba0.png')
         .addImage('player_lower_right', 'assets/baba1.png')
         .addImage('lemon', 'assets/lemon2.png')
+        .addImage('game_type_a', 'assets/game_type_a.png')
+        .addImage('game_type_b', 'assets/game_type_b.png')
     // sounds
         .addSound('roll', 'assets/egg.wav')
         .addSound('catch', 'assets/catch.wav')
