@@ -1,6 +1,10 @@
-var bottle = new Image();
-bottle.src = 'assets/butelka0.png';
+var loader =  new Loader();
 
+var playerImageNames = [];
+playerImageNames[Game.Direction.UpperLeft]  = 'player_upper_left';
+playerImageNames[Game.Direction.UpperRight] = 'player_upper_right';
+playerImageNames[Game.Direction.LowerLeft]  = 'player_lower_left';
+playerImageNames[Game.Direction.LowerRight] = 'player_lower_right';
 
 var upperLeftRail =  new Array([140, 90],  [155, 95],  [170, 100], [185, 105], [200, 130]);
 var upperRightRail = new Array([360, 90],  [345, 95],  [330, 100], [315, 105], [300, 130]);
@@ -9,13 +13,12 @@ var lowerRightRail = new Array([360, 155], [345, 160], [330, 165], [315, 170], [
 
 var leftEscape =     new Array([200, 205], [185, 205], [170, 205], [155, 205], [140, 205]);
 var rightEscape =    new Array([300, 205], [315, 205], [330, 205], [345, 205], [360, 205]);
-var playerPos =      new Array([183, 137], [195, 137], [195, 137], [183, 137]);
+
+var playerPos =      new Array([195, 137], [183, 137], [183, 137], [195, 137]);
 
 function drawPlayer(position, context) {
-    var img_src = 'assets/baba' + position + '.png';
-    var playerImg = new Image();
-    playerImg.src = img_src;
-    context.drawImage(playerImg, playerPos[position][0], playerPos[position][1]);
+    var playerImage = loader.getImage(playerImageNames[position]);
+    context.drawImage(playerImage, playerPos[position][0], playerPos[position][1]);
     
 }
 
@@ -29,7 +32,9 @@ function update(state){
 
     var surface = document.querySelector("#game");
     var context = surface.getContext("2d");
-    context.clearRect(0, 0, surface.width, surface.height);
+    var bottle = loader.getImage('bottle');
+
+    context.drawImage(loader.getImage('game'), 0, 0);
 
     drawPlayer(state.playerDirection, context);
     drawScore(state.caughtCount, context);
@@ -56,8 +61,7 @@ function update(state){
 	}
     }
 
-    var decoration = new Image(); decoration.src = 'assets/bg.png';
-    context.drawImage(decoration, 135, 78);
+    context.drawImage(loader.getImage('background'), 135, 78);
 
 }
 
@@ -94,6 +98,14 @@ function handleKey(keyCode)
         else if (playerDir == Game.Direction.UpperRight)
             Game.setPlayerDirection(Game.Direction.LowerRight);
     }
+    else if (keyCode == 65) // 'A' or 'a'
+    {
+        Game.startGameA();
+    }
+    else if (keyCode == 66) // 'B' or 'b'
+    {
+        Game.startGameB();
+    }
 }
 
 function registerKeyHandler()
@@ -114,8 +126,35 @@ function registerKeyHandler()
     };
 }
 
-function init()
+function displayGame()
 {
+    // hide loader div
+    var loaderDiv = document.getElementById('loader');
+    loaderDiv.style.display = 'none';
+
+    // display game canvas
+    var surface = document.getElementById('game');
+    surface.style.display = 'block';
+
     registerKeyHandler();
     Game.onStateChange(update);
+}
+
+function initAssets()
+{
+    loader.onAllLoaded(displayGame);
+    loader
+        .addImage('game', 'assets/game.png')
+        .addImage('background', 'assets/bg.png')
+        .addImage('bottle', 'assets/butelka0.png')
+        .addImage('player_upper_left', 'assets/baba2.png')
+        .addImage('player_upper_right', 'assets/baba3.png')
+        .addImage('player_lower_left', 'assets/baba0.png')
+        .addImage('player_lower_right', 'assets/baba1.png')
+        .finish();
+}
+
+function init()
+{
+    initAssets();
 }

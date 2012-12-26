@@ -17,10 +17,10 @@ var MaxDrops = Game.MaxDrops = 3;
 
 var Direction = Game.Direction =
 {
-    UpperLeft:  2,
-    UpperRight: 3,
-    LowerLeft:  0,
-    LowerRight: 1
+    UpperLeft:  0,
+    UpperRight: 1,
+    LowerLeft:  2,
+    LowerRight: 3
 };
 
 function State(type)
@@ -152,7 +152,7 @@ Game.onItemDropped = function(callback)
 
 Game.startGameA = function()
 {
-    options = GameAOptions();
+    options = GameAOptions;
 
     Game.State = new State('A');
     Game.State.running = true;
@@ -162,7 +162,7 @@ Game.startGameA = function()
 
 Game.startGameB = function()
 {
-    options = GameBOptions();
+    options = GameBOptions;
 
     Game.State = new State('B');
     Game.State.running = true;
@@ -186,6 +186,7 @@ function timerTick()
 
     var currentStepInterval =
         options.stepIntervalRamp.interpolate(Game.State.step);
+    console.log(currentStepInterval);
     if (stepTimer.elapsed() > currentStepInterval)
     {
         // new game step
