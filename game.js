@@ -80,16 +80,49 @@ function Options(stepIntervalRamp,
 
 function Timer()
 {
-    this.lastTime = (new Date()).getTime();
+    function getTime()
+    {
+        return (new Date()).getTime();
+    };
+
+    var lastTime = getTime();
+    var haltTime = -1;
 
     this.reset = function()
     {
-        this.lastTime = (new Date()).getTime();
+        lastTime = getTime();
+        if (this.isHalted())
+            haltTime = -1;
+    };
+
+    this.halt = function()
+    {
+        if (this.isHalted())
+            return; // already halted
+
+        haltTime = getTime();
+    };
+
+    this.unhalt = function()
+    {
+        if (!this.isHalted())
+            return; // not halted
+
+        lastTime = getTime() - haltTime + lastTime;
+        haltTime = -1;
+    };
+
+    this.isHalted = function()
+    {
+        return haltTime >= 0;
     };
 
     this.elapsed = function()
     {
-        return (new Date()).getTime() - this.lastTime;
+        if (!this.isHalted())
+            return getTime() - lastTime;
+        else
+            return haltTime - lastTime;
     };
 };
 
@@ -211,6 +244,12 @@ function timerTick()
     }
 }
 
+function haltGame(interval)
+{
+    stepTimer.halt();
+    window.setTimeout(function() { stepTimer.unhalt(); }, interval);
+}
+
 function runGameStep()
 {
     // note that newItemDirection might be null (no new items)
@@ -329,6 +368,7 @@ function itemCaught()
 function itemDropped()
 {
     Game.State.droppedCount += 1;
+    haltGame(1000);
 
     if (typeof itemDroppedCallback == 'function')
         itemDroppedCallback();
