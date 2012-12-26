@@ -16,15 +16,33 @@ var rightEscape =    new Array([300, 205], [315, 205], [330, 205], [345, 205], [
 
 var playerPos =      new Array([195, 137], [183, 137], [183, 137], [195, 137]);
 
+function zeroFill(number, width) {
+    width -= (number.toString().length - /\./.test(number));
+    if (width > 0) {
+        return new Array(width + 1).join('0') + number;
+    }
+    return number + ""; // always return a string
+}
+
+
 function drawPlayer(position, context) {
     var playerImage = loader.getImage(playerImageNames[position]);
     context.drawImage(playerImage, playerPos[position][0], playerPos[position][1]);
     
 }
 
-function drawScore(score, context) {
+
+function drawScore(score, fails, context) {
     context.textBaseline = 'top';
-    context.fillText(score, 220, 110);
+    context.font         = '18px lcd';
+    context.fillStyle    = '#3e3e3e';
+    context.fillText(zeroFill(score, 4), 220, 93);
+    var lemonImage = loader.getImage('lemon');
+    var lemons = Math.abs(3-fails);
+    for(var i=0;i<lemons;i++){
+	var x = 245 - i * 15;
+	context.drawImage(lemonImage, x, 110);	
+    }
 }
 
 
@@ -35,9 +53,10 @@ function update(state){
     var bottle = loader.getImage('bottle');
 
     context.drawImage(loader.getImage('game'), 0, 0);
-
-    drawPlayer(state.playerDirection, context);
-    drawScore(state.caughtCount, context);
+    if (state.running) {
+	drawPlayer(state.playerDirection, context);
+	drawScore(state.caughtCount, state.droppedCount, context);	
+    }
 
     for(var i=0; i<5; i++) {
 	
@@ -74,7 +93,7 @@ function handleKey(keyCode)
         if (playerDir == Game.Direction.UpperRight)
             Game.setPlayerDirection(Game.Direction.UpperLeft);
         else if (playerDir == Game.Direction.LowerRight)
-            Game.setPlayerDirection(Game.Direction.LowerLeft);
+        Game.setPlayerDirection(Game.Direction.LowerLeft);
 
     }
     else if (keyCode == 38) // cursor up
@@ -82,21 +101,21 @@ function handleKey(keyCode)
         if (playerDir == Game.Direction.LowerLeft)
             Game.setPlayerDirection(Game.Direction.UpperLeft);
         else if (playerDir == Game.Direction.LowerRight)
-            Game.setPlayerDirection(Game.Direction.UpperRight);
+        Game.setPlayerDirection(Game.Direction.UpperRight);
     }
     else if (keyCode == 39) // cursor right
     {
         if (playerDir == Game.Direction.UpperLeft)
             Game.setPlayerDirection(Game.Direction.UpperRight);
         else if (playerDir == Game.Direction.LowerLeft)
-            Game.setPlayerDirection(Game.Direction.LowerRight);
+        Game.setPlayerDirection(Game.Direction.LowerRight);
     }
     else if (keyCode == 40) // cursor down
     {
         if (playerDir == Game.Direction.UpperLeft)
             Game.setPlayerDirection(Game.Direction.LowerLeft);
         else if (playerDir == Game.Direction.UpperRight)
-            Game.setPlayerDirection(Game.Direction.LowerRight);
+        Game.setPlayerDirection(Game.Direction.LowerRight);
     }
     else if (keyCode == 65) // 'A' or 'a'
     {
@@ -154,7 +173,7 @@ function initAssets()
 {
     loader.onAllLoaded(displayGame);
     loader
-        // images
+    // images
         .addImage('game', 'assets/game.png')
         .addImage('background', 'assets/bg.png')
         .addImage('bottle', 'assets/butelka0.png')
@@ -162,7 +181,8 @@ function initAssets()
         .addImage('player_upper_right', 'assets/baba3.png')
         .addImage('player_lower_left', 'assets/baba0.png')
         .addImage('player_lower_right', 'assets/baba1.png')
-        // sounds
+        .addImage('lemon', 'assets/lemon2.png')
+    // sounds
         .addSound('roll', 'assets/egg.wav')
         .addSound('catch', 'assets/catch.wav')
         .addSound('drop', 'assets/drop.wav')
